@@ -84,7 +84,7 @@ class _LoadingIndicatorDotsState extends State<LoadingIndicatorDots>
       // build animation
 
       // add all dots
-
+      _createDots(i);
     }
   }
 
@@ -97,5 +97,16 @@ class _LoadingIndicatorDotsState extends State<LoadingIndicatorDots>
           children: _loadingWidget,
         )
     );
+  }
+
+  void _createDots(int i) {
+    _loadingWidget.add(Padding(
+      padding: EdgeInsets.only(right: spacing),
+      child: _LoadingIndicator(
+        //TODO:: Animator
+        fontSize: fontSize,
+        color: color,
+      )
+    ));
   }
 }
