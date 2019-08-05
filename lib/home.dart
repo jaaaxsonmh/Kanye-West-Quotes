@@ -3,6 +3,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:kanye_quotes/api/quote_data.dart';
+import 'package:kanye_quotes/widgets/progress_indicator.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -35,7 +36,9 @@ class _HomeState extends State<Home> {
   }
 
   Widget _buildQuoteWidget() {
-    return new Center(child: _quote == null ? new CircularProgressIndicator() : new Text(_quote));
+    return new Center(child: _quote == null ? new LoadingIndicatorDots(
+      fontSize: 30.0,
+    ) : new Text(_quote));
   }
 
   Widget _buildButtonWidget() {

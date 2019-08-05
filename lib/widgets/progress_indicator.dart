@@ -9,7 +9,6 @@ class _LoadingIndicator extends AnimatedWidget {
       {Key key, Animation<double> animation, this.color, this.fontSize})
       : super(key: key, listenable: animation);
 
-  @override
   Widget build(BuildContext context) {
     final Animation<double> animation = listenable;
     return Container(
@@ -23,7 +22,7 @@ class _LoadingIndicator extends AnimatedWidget {
 }
 
 class LoadingIndicatorDots extends StatefulWidget {
-  final int number;
+  final int amount;
 
   final double fontSize;
 
@@ -37,14 +36,14 @@ class LoadingIndicatorDots extends StatefulWidget {
   final double endTween = 8.0;
 
   LoadingIndicatorDots(
-      {this.number = 3,
+      {this.amount = 3,
       this.fontSize = 10.0,
       this.color = Colors.black,
       this.spacing = 0.0,
       this.ms = 250});
 
   _LoadingIndicatorDotsState createState() => _LoadingIndicatorDotsState(
-        number: this.number,
+        number: this.amount,
         fontSize: this.fontSize,
         color: this.color,
         spacing: this.spacing,
@@ -77,23 +76,19 @@ class _LoadingIndicatorDotsState extends State<LoadingIndicatorDots>
     super.initState();
     for (int i = 0; i < number; i++) {
       //build controllers
-      _animationControllerList.add(AnimationController(
-          vsync: this, duration: Duration(milliseconds: ms)));
+      _createController();
       // build animation
       _createAnimations(i);
       // add all dots
       _createDots(i);
     }
+
+    _animationControllerList[0].forward();
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-        height: 25.0,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: _loadingWidgetList,
-        ));
+  void _createController() {
+    _animationControllerList.add(
+        AnimationController(vsync: this, duration: Duration(milliseconds: ms)));
   }
 
   void _createDots(int i) {
@@ -110,18 +105,28 @@ class _LoadingIndicatorDotsState extends State<LoadingIndicatorDots>
     _animationList.add(Tween(begin: widget.beginTween, end: widget.endTween)
         .animate(_animationControllerList[i])
           ..addStatusListener((AnimationStatus status) {
-            if (status == AnimationStatus.completed)
+            if (status == AnimationStatus.completed) {
               _animationControllerList[i].reverse();
-
-            if (i == number - 1 && status == AnimationStatus.dismissed)
+            }
+            if (i == number - 1 && status == AnimationStatus.dismissed) {
               _animationControllerList[0].forward();
-
-            if (_animationList[i].value > widget.endTween / 2 && i < number - 1)
+            }
+            if (_animationList[i].value > widget.endTween / 2 &&
+                i < number - 1) {
               _animationControllerList[i + 1].forward();
+            }
           }));
   }
 
-  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+        height: 40.0,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: _loadingWidgetList,
+        ));
+  }
+
   void dispose() {
     for (int i = 0; i < number; i++) _animationControllerList[i].dispose();
     super.dispose();
