@@ -10,7 +10,7 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  String _quote = "Loading...";
+  String _quote;
 
   @override
   void initState() {
@@ -35,14 +35,16 @@ class _HomeState extends State<Home> {
   }
 
   Widget _buildQuoteWidget() {
-    return new Center(child: new Text(_quote));
+    return new Center(child: _quote == null ? new CircularProgressIndicator() : new Text(_quote));
   }
 
   Widget _buildButtonWidget() {
-    return new FlatButton(onPressed: getQuote, child: new Text("new quote"));
-  }
-
+  return new FlatButton(onPressed: getQuote, child: new Text("new quote"));
+}
   void getQuote() {
+    setState(() {
+      _quote =null;
+    });
     findNew().then((val) => setState(() {
           _quote = val;
         }));
@@ -62,5 +64,4 @@ class _HomeState extends State<Home> {
 
     return responseBody.quote;
   }
-
 }
