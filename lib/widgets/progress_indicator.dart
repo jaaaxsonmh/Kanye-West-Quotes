@@ -70,6 +70,15 @@ class _LoadingIndicatorDotsState extends State<LoadingIndicatorDots> with Ticker
     this.color,
 });
 
+  initState() {
+    super.initState();
+    for(int i = 0; i < number; i++) {
+      //build controllers
+      // build animation
+      // add all dots
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
