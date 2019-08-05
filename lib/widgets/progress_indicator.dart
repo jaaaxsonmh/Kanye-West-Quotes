@@ -100,7 +100,7 @@ class _LoadingIndicatorDotsState extends State<LoadingIndicatorDots>
     _loadingWidgetList.add(Padding(
         padding: EdgeInsets.only(right: spacing),
         child: _LoadingIndicator(
-          //TODO:: Animator
+          animation: _animationList[i],
           fontSize: fontSize,
           color: color,
         )));
