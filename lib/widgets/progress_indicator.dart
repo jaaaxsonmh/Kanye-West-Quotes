@@ -62,6 +62,8 @@ class _LoadingIndicatorDotsState extends State<LoadingIndicatorDots> with Ticker
   double spacing;
   Color color;
 
+  List<AnimationController> _animationController = new List<AnimationController>();
+
   _LoadingIndicatorDotsState({
     this.number,
     this.fontSize,
@@ -74,8 +76,11 @@ class _LoadingIndicatorDotsState extends State<LoadingIndicatorDots> with Ticker
     super.initState();
     for(int i = 0; i < number; i++) {
       //build controllers
+      _animationController.add(AnimationController(vsync: this, duration: Duration(milliseconds: ms)));
       // build animation
+
       // add all dots
+
     }
   }
 
