@@ -54,7 +54,8 @@ class LoadingIndicatorDots extends StatefulWidget {
       );
 }
 
-class _LoadingIndicatorDotsState extends State<LoadingIndicatorDots> with TickerProviderStateMixin {
+class _LoadingIndicatorDotsState extends State<LoadingIndicatorDots>
+    with TickerProviderStateMixin {
 
   int number;
   int ms;
@@ -62,7 +63,9 @@ class _LoadingIndicatorDotsState extends State<LoadingIndicatorDots> with Ticker
   double spacing;
   Color color;
 
-  List<AnimationController> _animationController = new List<AnimationController>();
+  List<AnimationController> _animationController = new List<
+      AnimationController>();
+  List<Widget> _loadingWidget = new List<Widget>();
 
   _LoadingIndicatorDotsState({
     this.number,
@@ -70,13 +73,14 @@ class _LoadingIndicatorDotsState extends State<LoadingIndicatorDots> with Ticker
     this.spacing,
     this.ms,
     this.color,
-});
+  });
 
   initState() {
     super.initState();
-    for(int i = 0; i < number; i++) {
+    for (int i = 0; i < number; i++) {
       //build controllers
-      _animationController.add(AnimationController(vsync: this, duration: Duration(milliseconds: ms)));
+      _animationController.add(AnimationController(
+          vsync: this, duration: Duration(milliseconds: ms)));
       // build animation
 
       // add all dots
@@ -86,7 +90,12 @@ class _LoadingIndicatorDotsState extends State<LoadingIndicatorDots> with Ticker
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
-    return null;
+    return SizedBox(
+        height: 25.0,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: _loadingWidget,
+        )
+    );
   }
 }
