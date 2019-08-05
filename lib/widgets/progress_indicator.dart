@@ -36,16 +36,14 @@ class LoadingIndicatorDots extends StatefulWidget {
   final double beginTween = 0.0;
   final double endTween = 8.0;
 
-  LoadingIndicatorDots({
-    this.number = 3,
-    this.fontSize = 10.0,
-    this.color = Colors.black,
-    this.spacing = 0.0,
-    this.ms = 250
-  });
+  LoadingIndicatorDots(
+      {this.number = 3,
+      this.fontSize = 10.0,
+      this.color = Colors.black,
+      this.spacing = 0.0,
+      this.ms = 250});
 
-  _LoadingIndicatorDotsState createState() =>
-      _LoadingIndicatorDotsState(
+  _LoadingIndicatorDotsState createState() => _LoadingIndicatorDotsState(
         number: this.number,
         fontSize: this.fontSize,
         color: this.color,
@@ -56,16 +54,16 @@ class LoadingIndicatorDots extends StatefulWidget {
 
 class _LoadingIndicatorDotsState extends State<LoadingIndicatorDots>
     with TickerProviderStateMixin {
-
   int number;
   int ms;
   double fontSize;
   double spacing;
   Color color;
 
-  List<AnimationController> _animationController = new List<
-      AnimationController>();
-  List<Widget> _loadingWidget = new List<Widget>();
+  List<AnimationController> _animationControllerList =
+      new List<AnimationController>();
+  List<Widget> _loadingWidgetList = new List<Widget>();
+  List<Animation<double>> _animationList = new List<Animation<double>>();
 
   _LoadingIndicatorDotsState({
     this.number,
@@ -79,10 +77,10 @@ class _LoadingIndicatorDotsState extends State<LoadingIndicatorDots>
     super.initState();
     for (int i = 0; i < number; i++) {
       //build controllers
-      _animationController.add(AnimationController(
+      _animationControllerList.add(AnimationController(
           vsync: this, duration: Duration(milliseconds: ms)));
       // build animation
-
+      _createAnimations(i);
       // add all dots
       _createDots(i);
     }
@@ -94,19 +92,38 @@ class _LoadingIndicatorDotsState extends State<LoadingIndicatorDots>
         height: 25.0,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: _loadingWidget,
-        )
-    );
+          children: _loadingWidgetList,
+        ));
   }
 
   void _createDots(int i) {
-    _loadingWidget.add(Padding(
-      padding: EdgeInsets.only(right: spacing),
-      child: _LoadingIndicator(
-        //TODO:: Animator
-        fontSize: fontSize,
-        color: color,
-      )
-    ));
+    _loadingWidgetList.add(Padding(
+        padding: EdgeInsets.only(right: spacing),
+        child: _LoadingIndicator(
+          //TODO:: Animator
+          fontSize: fontSize,
+          color: color,
+        )));
+  }
+
+  void _createAnimations(int i) {
+    _animationList.add(Tween(begin: widget.beginTween, end: widget.endTween)
+        .animate(_animationControllerList[i])
+          ..addStatusListener((AnimationStatus status) {
+            if (status == AnimationStatus.completed)
+              _animationControllerList[i].reverse();
+
+            if (i == number - 1 && status == AnimationStatus.dismissed)
+              _animationControllerList[0].forward();
+
+            if (_animationList[i].value > widget.endTween / 2 && i < number - 1)
+              _animationControllerList[i + 1].forward();
+          }));
+  }
+
+  @override
+  void dispose() {
+    for (int i = 0; i < number; i++) _animationControllerList[i].dispose();
+    super.dispose();
   }
 }
