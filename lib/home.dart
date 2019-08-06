@@ -22,11 +22,30 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
+      appBar: new AppBar(
+        title: new Container(
+          child: new Text("Kanye West Quotes"),
+          alignment: Alignment.center,
+        ),
+      ),
+      floatingActionButton: _buildButtonWidget(),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      bottomNavigationBar: BottomAppBar(
+        child: new Row(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            IconButton(
+              icon: Icon(Icons.menu),
+              onPressed: () {},
+            ),
+          ],
+        ),
+      ),
       body: new Center(
         child: new Column(
           children: <Widget>[
             _buildQuoteWidget(),
-            _buildButtonWidget()
           ],
           mainAxisAlignment: MainAxisAlignment.center,
         ),
@@ -35,17 +54,33 @@ class _HomeState extends State<Home> {
   }
 
   Widget _buildQuoteWidget() {
-    return new Center(child: _quote == null ? new LoadingIndicatorDots(
-      fontSize: 30.0,
-    ) : new Text(_quote));
+    return new Center(
+        child: _quote == null
+            ? new LoadingIndicatorDots(
+                fontSize: 30.0,
+              )
+            : new Text(
+                _quote,
+                style: new TextStyle(
+                  fontSize: 24.0,
+                ),
+              ));
   }
 
   Widget _buildButtonWidget() {
-  return new FlatButton(onPressed: getQuote, child: new Text("new quote"));
-}
+    return FloatingActionButton.extended(
+      elevation: 4.0,
+      icon: const Icon(Icons.add),
+      label: const Text('Kanye said...'),
+      onPressed: () {
+        getQuote();
+      },
+    );
+  }
+
   void getQuote() {
     setState(() {
-      _quote =null;
+      _quote = null;
     });
     findNew().then((val) => setState(() {
           _quote = val;
