@@ -54,17 +54,21 @@ class _HomeState extends State<Home> {
   }
 
   Widget _buildQuoteWidget() {
-    return new Center(
-        child: _quote == null
-            ? new LoadingIndicatorDots(
-                fontSize: 30.0,
-              )
-            : new Text(
-                _quote,
-                style: new TextStyle(
-                  fontSize: 24.0,
-                ),
-              ));
+    return new Container(
+        child: new Center(
+          child:
+            _quote == null
+                ? new LoadingIndicatorDots(
+              fontSize: 30.0,
+            )
+                : new Text(
+              _quote,
+              textAlign: TextAlign.center,
+              style: new TextStyle(
+                fontSize: 24.0,
+              ),
+            )
+        ));
   }
 
   Widget _buildButtonWidget() {
