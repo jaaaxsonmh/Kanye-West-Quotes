@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:kanye_quotes/api/quote_data.dart';
 import 'package:kanye_quotes/widgets/progress_indicator.dart';
+import 'package:dropdown_banner/dropdown_banner.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -12,8 +13,6 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   String _quote;
-
-  final _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
@@ -24,7 +23,6 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-      key: _scaffoldKey,
       appBar: new AppBar(
         title: new Container(
           child: new Text("Kanye West Quotes"),
@@ -38,22 +36,18 @@ class _HomeState extends State<Home> {
           mainAxisSize: MainAxisSize.max,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
+            IconButton(icon: Icon(Icons.menu), onPressed: () {}),
             IconButton(
-              icon: Icon(Icons.menu),
-              onPressed: () {}
-            ),
-            IconButton(
-              icon: Icon(Icons.info_outline),
-              onPressed: () {_displayBar(context);}
-            )
+                icon: Icon(Icons.info_outline),
+                onPressed: () {
+                  _displayBar(context);
+                })
           ],
         ),
       ),
       body: new Center(
         child: new Column(
-          children: <Widget>[
-            _buildQuoteWidget()
-          ],
+          children: <Widget>[_buildQuoteWidget()],
           mainAxisAlignment: MainAxisAlignment.center,
         ),
       ),
@@ -63,19 +57,11 @@ class _HomeState extends State<Home> {
   Widget _buildQuoteWidget() {
     return new Container(
         child: new Center(
-          child:
-            _quote == null
-                ? new LoadingIndicatorDots(
-              fontSize: 30.0
-            )
-                : new Text(
-              _quote,
-              textAlign: TextAlign.center,
-              style: new TextStyle(
-                fontSize: 24.0
-              )
-            )
-        ));
+            child: _quote == null
+                ? new LoadingIndicatorDots(fontSize: 30.0)
+                : new Text(_quote,
+                    textAlign: TextAlign.center,
+                    style: new TextStyle(fontSize: 24.0))));
   }
 
   Widget _buildButtonWidget() {
@@ -114,7 +100,11 @@ class _HomeState extends State<Home> {
   }
 
   void _displayBar(BuildContext context) {
-    final snackBar = SnackBar(content: Text('Built by Jack Hosking, to demonstrate simple API use'));
-    _scaffoldKey.currentState.showSnackBar(snackBar);
+    DropdownBanner.showBanner(
+        text: 'Built by Jack Hosking',
+        color: Colors.red,
+        textStyle: TextStyle(
+          color: Colors.white,
+        ));
   }
 }
